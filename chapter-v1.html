@@ -276,24 +276,27 @@ body {
 }
 
 .chapter-context__part {
-  margin-top: var(--s-6);
+  margin-top: var(--s-5);
 }
 
+/* Part header — single tight row: small uppercase «PART I», then title */
 .chapter-context__part-label {
   font-size: 10px;
   font-weight: 600;
-  letter-spacing: 0.14em;
+  letter-spacing: 0.12em;
   text-transform: uppercase;
   color: var(--ink-muted);
-  margin: 0 0 var(--s-3) 0;
+  margin: 0 0 2px 0;
 }
 
 .chapter-context__part-title {
-  font-size: 14px;
+  font-size: 13px;
   font-weight: 600;
-  color: var(--ink);
-  margin: 0 0 var(--s-4) 0;
+  color: var(--ink-soft);
+  margin: 0 0 var(--s-3) 0;
   letter-spacing: -0.005em;
+  text-transform: uppercase;
+  letter-spacing: 0.04em;
 }
 
 .chapter-context__chapters {
@@ -311,20 +314,20 @@ body {
   content: none;
 }
 
-/* Notion-style chapter row: rounded hover bg, compact padding,
-   subtle active state via background not bold weight. */
+/* Notion-style chapter row: rounded hover bg, compact padding.
+   Active = bold + accent marker bar (no full plate behind text). */
 .chapter-context__chapters a {
   display: block;
-  padding: 5px 8px;
-  margin-left: -8px;
+  position: relative;
+  padding: 4px 8px;
   border-radius: 4px;
   font-family: var(--font-heading);
   font-size: 14px;
   color: var(--ink-soft);
   text-decoration: none;
   border-bottom: none;
-  transition: background-color 0.15s ease, color 0.15s ease;
-  line-height: 1.35;
+  transition: background-color 0.12s ease, color 0.12s ease;
+  line-height: 1.4;
 }
 
 .chapter-context__chapters a:hover {
@@ -333,9 +336,21 @@ body {
 }
 
 .chapter-context__chapters .is-current > a {
-  background: rgba(0, 0, 0, 0.05);
   color: var(--ink);
   font-weight: 600;
+  background: transparent;       /* no full-row plate — keep it quiet */
+}
+
+/* Small accent bar to the left of the current chapter (Notion-page-tree feel) */
+.chapter-context__chapters .is-current > a::after {
+  content: "";
+  position: absolute;
+  left: -10px;
+  top: 6px;
+  bottom: 6px;
+  width: 2px;
+  border-radius: 1px;
+  background: var(--ink);
 }
 
 /* "Прочитано" marker — Notion-style checkmark in front of the chapter title.
@@ -354,12 +369,12 @@ body {
   color: var(--ink-muted);   /* already-read chapters quietly recede */
 }
 
-/* Mini-TOC: current chapter's H2/H3 list, with auto-highlight on scroll */
+/* Mini-TOC: current chapter's H2/H3 list.  Indented just enough to
+   nest under the parent, no left rule — Notion's quieter pattern. */
 .chapter-toc {
   list-style: none;
-  padding: var(--s-4) 0 0 var(--s-4);
+  padding: 4px 0 4px 14px;
   margin: 0;
-  border-left: 1px solid var(--rule);
 }
 
 .chapter-toc li {
@@ -373,18 +388,21 @@ body {
 
 .chapter-toc a {
   display: block;
-  padding: 4px 0;
+  padding: 3px 8px;
+  margin-left: -8px;
+  border-radius: 4px;
   font-family: var(--font-heading);
-  font-size: 12.5px;
-  line-height: 1.45;
+  font-size: 13px;
+  line-height: 1.4;
   color: var(--ink-muted);
   text-decoration: none;
   border-bottom: none;
-  transition: color 0.15s ease;
+  transition: background-color 0.12s ease, color 0.12s ease;
   position: relative;
 }
 
 .chapter-toc a:hover {
+  background: rgba(0, 0, 0, 0.04);
   color: var(--ink);
 }
 
@@ -396,10 +414,11 @@ body {
 .chapter-toc .is-active > a::before {
   content: "";
   position: absolute;
-  left: calc(var(--s-4) * -1 - 1px);
-  top: 0.65em;
+  left: -16px;
+  top: 0.5em;
   width: 2px;
   height: 1em;
+  border-radius: 1px;
   background: var(--ink);
 }
 
