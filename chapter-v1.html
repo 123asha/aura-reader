@@ -190,24 +190,42 @@ body {
   padding: 0;
   margin: 0;
 }
+.global-nav__items li { padding-left: 0; }
+.global-nav__items li::before { content: none; }
 
+/* Notion-style icon button: small square, letter inside, rounded hover. */
 .global-nav__items a {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 36px;
+  height: 36px;
+  border-radius: 6px;
   font-family: var(--font-heading);
-  font-size: 10px;
-  font-weight: 500;
-  letter-spacing: 0.1em;
-  text-transform: uppercase;
+  font-size: 12px;
+  font-weight: 600;
+  letter-spacing: -0.005em;
   color: var(--ink-muted);
   text-decoration: none;
   border-bottom: none;
-  transition: color 0.15s ease;
-  writing-mode: vertical-rl;
-  transform: rotate(180deg);
-  padding: var(--s-3) 0;
+  transition: background-color 0.15s ease, color 0.15s ease;
 }
 
 .global-nav__items a:hover {
+  background: rgba(0, 0, 0, 0.05);
   color: var(--ink);
+}
+
+.global-nav__items .sr-only {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  padding: 0;
+  margin: -1px;
+  overflow: hidden;
+  clip: rect(0,0,0,0);
+  white-space: nowrap;
+  border: 0;
 }
 
 /* ─── Middle column — chapter context ─── */
@@ -223,27 +241,30 @@ body {
   scrollbar-width: thin;
 }
 
+/* Notion-style search/contents row — subtle hover, no border, rounded. */
 .chapter-context__open-toc {
   display: flex;
   align-items: center;
   gap: var(--s-2);
   width: 100%;
-  padding: var(--s-3) 0;
+  padding: 6px 8px;
+  margin-left: -8px;
   font-family: var(--font-heading);
   font-size: 14px;
   font-weight: 500;
-  color: var(--ink);
+  color: var(--ink-soft);
   background: transparent;
   border: none;
-  border-bottom: 1px solid var(--rule);
+  border-radius: 4px;
   cursor: pointer;
   text-align: left;
-  transition: color 0.15s ease;
+  transition: background-color 0.15s ease, color 0.15s ease;
   letter-spacing: -0.005em;
 }
 
 .chapter-context__open-toc:hover {
-  color: var(--accent);
+  background: rgba(0, 0, 0, 0.05);
+  color: var(--ink);
 }
 
 .chapter-context__open-toc-icon {
@@ -251,7 +272,7 @@ body {
   width: 14px;
   height: 14px;
   flex-shrink: 0;
-  opacity: 0.6;
+  opacity: 0.7;
 }
 
 .chapter-context__part {
@@ -290,38 +311,44 @@ body {
   content: none;
 }
 
+/* Notion-style chapter row: rounded hover bg, compact padding,
+   subtle active state via background not bold weight. */
 .chapter-context__chapters a {
   display: block;
-  padding: 4px 0;
+  padding: 5px 8px;
+  margin-left: -8px;
+  border-radius: 4px;
   font-family: var(--font-heading);
   font-size: 14px;
-  color: var(--ink-muted);
+  color: var(--ink-soft);
   text-decoration: none;
   border-bottom: none;
-  transition: color 0.15s ease;
-  line-height: 1.4;
+  transition: background-color 0.15s ease, color 0.15s ease;
+  line-height: 1.35;
 }
 
 .chapter-context__chapters a:hover {
+  background: rgba(0, 0, 0, 0.04);
   color: var(--ink);
 }
 
 .chapter-context__chapters .is-current > a {
+  background: rgba(0, 0, 0, 0.05);
   color: var(--ink);
   font-weight: 600;
 }
 
-/* "Прочитано" marker — small filled dot in front of the chapter title.
+/* "Прочитано" marker — Notion-style checkmark in front of the chapter title.
    Brief §13: this is clientside state (no accounts).  Demo here is static
    — production would read/write this from localStorage on chapter scroll
    completion. */
 .chapter-context__chapters .is-read > a::before {
-  content: "●";
-  color: var(--accent);
-  font-size: 0.55em;
-  vertical-align: 0.18em;
-  margin-right: 4px;
-  opacity: 0.8;
+  content: "✓";
+  color: var(--ink-muted);
+  font-size: 0.85em;
+  font-weight: 600;
+  margin-right: 6px;
+  opacity: 0.7;
 }
 .chapter-context__chapters .is-read > a {
   color: var(--ink-muted);   /* already-read chapters quietly recede */
@@ -1455,19 +1482,24 @@ body.has-toc-open .floating-toc-btn {
   font-style: italic;
 }
 
-/* "Прочитано" marker in the full TOC overlay (matches the mini-TOC pattern). */
+/* "Прочитано" marker in the full TOC overlay — Notion-style checkmark
+   in place of the chapter number for read chapters. */
 .toc-overlay__chapters .is-read > a {
   color: var(--ink-muted);
 }
 .toc-overlay__chapters .is-read .toc-overlay__chapter-num {
-  color: var(--accent);
+  color: transparent;       /* hide the number itself, replace with ✓ */
+  position: relative;
 }
 .toc-overlay__chapters .is-read .toc-overlay__chapter-num::before {
-  content: "●";
-  color: var(--accent);
-  font-size: 0.6em;
-  margin-right: 4px;
-  vertical-align: 0.18em;
+  content: "✓";
+  color: var(--ink-muted);
+  position: absolute;
+  inset: 0;
+  font-size: 12px;
+  font-weight: 600;
+  display: flex;
+  align-items: center;
 }
 
 .toc-overlay__chapter-num {
@@ -1726,9 +1758,9 @@ hr {
   <nav class="global-nav" aria-label="Global">
     <a href="#" class="global-nav__logo" aria-label="Home">I.</a>
     <ul class="global-nav__items">
-      <li><a href="#">Books</a></li>
-      <li><a href="#">Canon</a></li>
-      <li><a href="#">Home</a></li>
+      <li><a href="#" title="Books"><span aria-hidden="true">B</span><span class="sr-only">Books</span></a></li>
+      <li><a href="#" title="Canon"><span aria-hidden="true">C</span><span class="sr-only">Canon</span></a></li>
+      <li><a href="#" title="Home"><span aria-hidden="true">H</span><span class="sr-only">Home</span></a></li>
     </ul>
   </nav>
 
