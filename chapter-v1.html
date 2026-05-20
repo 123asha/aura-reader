@@ -1054,21 +1054,12 @@ figure.series-opener {
   max-width: 100%;
   opacity: 0;
   pointer-events: none;
-  transform: perspective(1100px) rotateY(0deg);
-  transform-origin: center center;
-  transition: opacity 0.45s ease, transform 0.5s cubic-bezier(.2,.6,.2,1);
-  will-change: transform;
+  transition: opacity 0.2s ease;
 }
 
 .sticky-pane__media figure.is-active {
   opacity: 1;
   pointer-events: auto;
-}
-
-/* Hover — active image rotates slightly toward the reader (right edge
-   forward, like a postcard being lifted). Subtle, ~3° + tiny lift. */
-.sticky-pane__media figure.is-active:hover {
-  transform: perspective(1100px) rotateY(-3deg) rotateX(1.5deg) scale(1.015);
 }
 
 .sticky-pane__media figcaption {
