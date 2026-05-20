@@ -1,0 +1,11 @@
+# Ignore everything by default; we explicitly track only the chapter
+# prototype + its assets. The Documents/Claude folder also contains
+# unrelated scratch projects (skip-v3-*, etc.) — those stay outside.
+*
+
+# Explicit allow-list
+!.gitignore
+!chapter-v1.html
+!images/
+!images/*.png
+!README.md
