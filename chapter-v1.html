@@ -1551,6 +1551,31 @@ body.has-toc-open {
   overflow: hidden;
 }
 
+/* ───────────────────────────────────────────────────────────
+   TOP COLOR STRIP — thin multi-segment bar at the very top of the
+   viewport, Notion-style.  One dominant segment carries the brand
+   accent; smaller flanking segments add a touch of editorial color.
+   Purely decorative — pointer-events: none. */
+.top-strip {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  height: 3px;
+  display: flex;
+  z-index: 200;
+  pointer-events: none;
+}
+.top-strip__seg { height: 100%; }
+.top-strip__seg--main {
+  flex: 0 0 82%;
+  background: var(--accent);                /* #8B2A1E — brand accent */
+}
+.top-strip__seg--y    { flex: 0 0 7%;  background: #FEB51C; }   /* amber  */
+.top-strip__seg--g    { flex: 0 0 5%;  background: #95C92F; }   /* olive  */
+.top-strip__seg--d    { flex: 0 0 4%;  background: #2D3148; }   /* navy   */
+.top-strip__seg--b    { flex: 1 1 auto; background: #6B89B0; }  /* steel  */
+
 /* ===========================================================
    MARGINALIA — sidenotes in the right margin (Krichevsky pattern)
    ===========================================================
@@ -1685,6 +1710,15 @@ hr {
 </style>
 </head>
 <body>
+
+<!-- Decorative top color strip — Notion-style, dominant accent + 4 short flanking segments. -->
+<div class="top-strip" aria-hidden="true">
+  <span class="top-strip__seg top-strip__seg--main"></span>
+  <span class="top-strip__seg top-strip__seg--y"></span>
+  <span class="top-strip__seg top-strip__seg--g"></span>
+  <span class="top-strip__seg top-strip__seg--d"></span>
+  <span class="top-strip__seg top-strip__seg--b"></span>
+</div>
 
 <div class="layout">
 
