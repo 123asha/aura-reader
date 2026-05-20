@@ -834,30 +834,27 @@ a.fn-ref {
 }
 a.fn-ref:hover { color: var(--accent-soft); }
 
-/* Footnote list at the bottom of the chapter — ordered list with hanging numbers. */
-.footnotes {
-  margin: var(--s-9) 0 0 0;
-  padding-top: var(--s-5);
-  border-top: 1px solid var(--rule);
+/* Sidenote — footnote rendered inline next to the referencing text, not
+   at the bottom of the chapter. Quiet sans block under the paragraph,
+   with a small left rule for visual association. */
+.sidenote {
+  display: block;
   max-width: var(--measure);
-  font-size: var(--fs-caption);
+  margin: 6px 0 14px;
+  padding: 4px 0 4px 14px;
+  border-left: 2px solid var(--rule);
+  font-family: var(--font-heading);
+  font-size: 12px;
   line-height: 1.5;
-  color: var(--ink-soft);
-}
-.footnotes ol {
-  padding-left: var(--s-5);
-  margin: 0;
-  counter-reset: fn;
-}
-.footnotes ol li {
-  margin: 0 0 var(--s-3) 0;
-  padding-left: var(--s-3);
-}
-.footnotes ol li::marker {
   color: var(--ink-muted);
+  text-indent: 0;
+}
+.sidenote__num {
+  font-weight: 600;
+  color: var(--accent);
+  margin-right: 5px;
   font-variant-numeric: tabular-nums;
 }
-.footnotes p { text-indent: 0; margin: 0; max-width: none; }
 .fn-backref {
   font-family: var(--font-heading);
   font-size: 0.85em;
@@ -867,6 +864,9 @@ a.fn-ref:hover { color: var(--accent-soft); }
   border-bottom: none;
 }
 .fn-backref:hover { color: var(--accent); }
+
+/* (Old .footnotes bottom-of-chapter pattern removed in favour of inline
+   .sidenote — kept the .fn-backref style above for the ↩ link.) */
 
 /* ===========================================================
    FIGURES — single image with caption, Bureau Gorbunov style
@@ -1017,29 +1017,8 @@ figure.series-opener {
   pointer-events: auto;
 }
 
-/* Sticky-bottom variant — media pins to bottom-center of viewport instead
-   of right. Used for the Mechanic-cases section where each H3 + paragraph
-   gets a wide horizontal diagram beneath. When user scrolls past, the
-   image releases with the text (handled by the same JS bounds check). */
-.sticky-pane--bottom .sticky-pane__media {
-  top: auto;
-  right: auto;
-  bottom: 24px;
-  left: 50%;
-  transform: translateX(-50%);
-  width: clamp(420px, 60vw, 760px);
-  max-height: 34vh;
-}
-.sticky-pane--bottom .sticky-pane__media figure img {
-  max-height: 28vh;
-  object-fit: contain;
-  width: auto;
-  max-width: 100%;
-  margin: 0 auto;
-}
-.sticky-pane--bottom .sticky-pane__media figcaption {
-  text-align: center;
-}
+/* (Sticky-bottom variant removed — all paragraph-image pairs now use
+   the single sticky-right pattern for consistency.) */
 
 .sticky-pane__media figure {
   grid-column: 1;
@@ -2089,7 +2068,7 @@ hr {
 
   <p>Let's look at examples of strategic moves real products have made.</p>
 
-  <section class="sticky-pane sticky-pane--bottom">
+  <section class="sticky-pane">
 
     <div class="sticky-pane__text">
 
@@ -2101,6 +2080,11 @@ hr {
       </figure>
 
       <p data-image="5_1"><strong>Aviasales</strong><sup class="fn-ref"><a href="#fn1" id="fnref1" class="fn-ref">1</a></sup> doesn't compete with sites that <em>sell</em> tickets. It performs the <em>previous</em> Job: <em>"find the cheapest, most convenient tickets."</em> Its business model lets it find cheaper tickets and offer wider supply than any individual ticket-selling site can.</p>
+
+      <aside class="sidenote" id="fn1">
+        <span class="sidenote__num">1</span>
+        Aviasales — Russian flight-search aggregator; closest US analogues are Kayak and Skyscanner. <a href="#fnref1" class="fn-backref" aria-label="Back to text">↩</a>
+      </aside>
 
       <h3>Mechanic — <em>"climb to the previous Job"</em></h3>
 
@@ -2217,15 +2201,6 @@ hr {
   </aside>
 
   <p>Bring it up. Most of the corrections to this methodology came from someone naming a product I hadn't accounted for.</p>
-
-  <!-- ─── Footnotes (brief §7.4) ─── -->
-  <section class="footnotes" aria-label="Footnotes">
-    <ol>
-      <li id="fn1">
-        <p>Aviasales — Russian flight-search aggregator; closest US analogues are Kayak and Skyscanner. <a href="#fnref1" class="fn-backref" aria-label="Back to text">↩</a></p>
-      </li>
-    </ol>
-  </section>
 
 </main>
 
