@@ -1284,55 +1284,54 @@ body.has-toc-open .floating-toc-btn {
   transform: translateY(0);
 }
 
-/* Header */
+/* Header — Notion-style compact: single-line title, muted subtitle,
+   subscribe button kept but quiet on the side. */
 .toc-overlay__header {
-  padding: var(--s-6) var(--s-6) var(--s-5);
-  border-bottom: 1px solid var(--rule);
+  padding: 20px 24px 12px;
   display: flex;
   justify-content: space-between;
-  align-items: flex-start;
+  align-items: center;
   gap: var(--s-5);
 }
 
 .toc-overlay__stats {
   font-family: var(--font-heading);
+  display: flex;
+  align-items: baseline;
+  gap: 10px;
 }
 
 .toc-overlay__title {
-  font-size: 17px;
+  font-size: 14px;
   font-weight: 600;
   color: var(--ink);
-  margin: 0 0 4px 0;
-  letter-spacing: -0.01em;
+  margin: 0;
+  letter-spacing: -0.005em;
 }
 
 .toc-overlay__subtitle {
-  font-size: 14px;
+  font-size: 12px;
   color: var(--ink-muted);
   margin: 0;
 }
+.toc-overlay__subtitle::before { content: "·"; margin-right: 6px; opacity: 0.6; }
 
-/* "Subscribe to new chapters" — disabled placeholder ghost-button
-   (brief §7.3 specifies this is a future feature; was previously rendered
-   as a grey toggle, now a quieter button with an arrow). */
+/* "Subscribe to new chapters" — disabled ghost-link.  Quiet, Notion-style. */
 .toc-overlay__subscribe-btn {
   display: inline-flex;
   align-items: center;
-  gap: 8px;
-  padding: 8px 14px;
+  gap: 6px;
+  padding: 4px 8px;
   background: transparent;
-  border: 1px solid var(--rule);
-  border-radius: 999px;
+  border: none;
+  border-radius: 4px;
   font-family: var(--font-heading);
   font-size: 12px;
   font-weight: 500;
   color: var(--ink-muted);
   cursor: not-allowed;
   letter-spacing: 0.01em;
-  transition: border-color 0.15s ease, color 0.15s ease;
-}
-.toc-overlay__subscribe-btn:hover {
-  /* No real hover state since it's disabled — kept for completeness */
+  transition: background-color 0.15s ease;
 }
 
 /* Close button */
@@ -1358,33 +1357,38 @@ body.has-toc-open .floating-toc-btn {
   color: var(--ink);
 }
 
-/* Search */
+/* Search — Notion-style: clean row with icon, no borders, lives inside body */
 .toc-overlay__search {
-  padding: var(--s-4) var(--s-6);
-  border-bottom: 1px solid var(--rule);
+  padding: 4px 16px 12px;
   position: relative;
 }
 
 .toc-overlay__search-icon {
   position: absolute;
-  left: calc(var(--s-6) + 6px);
+  left: 24px;
   top: 50%;
   transform: translateY(-50%);
-  width: 16px;
-  height: 16px;
+  width: 14px;
+  height: 14px;
   color: var(--ink-muted);
   pointer-events: none;
 }
 
 .toc-overlay__search-input {
   width: 100%;
-  padding: 10px 50px 10px 36px;
+  padding: 8px 50px 8px 32px;
   font-family: var(--font-heading);
   font-size: 14px;
   color: var(--ink);
-  background: transparent;
+  background: rgba(0, 0, 0, 0.035);
   border: none;
   outline: none;
+  border-radius: 6px;
+  transition: background-color 0.15s ease;
+}
+
+.toc-overlay__search-input:focus {
+  background: rgba(0, 0, 0, 0.06);
 }
 
 .toc-overlay__search-input::placeholder {
@@ -1393,52 +1397,58 @@ body.has-toc-open .floating-toc-btn {
 
 .toc-overlay__shortcut {
   position: absolute;
-  right: calc(var(--s-6) + 6px);
+  right: 24px;
   top: 50%;
   transform: translateY(-50%);
   font-family: var(--font-mono);
   font-size: 10px;
   color: var(--ink-muted);
-  background: var(--rule);
+  background: rgba(0, 0, 0, 0.05);
   padding: 2px 6px;
   border-radius: 4px;
   pointer-events: none;
 }
 
-/* Body — list of parts and chapters */
+/* Body — Notion-style page tree.  Tight density, rounded hover rows,
+   visible nesting, subtle Part section labels. */
 .toc-overlay__body {
-  padding: var(--s-5) var(--s-6) var(--s-6);
+  padding: 4px 16px 20px;
   overflow-y: auto;
   flex: 1;
 }
 
 .toc-overlay__part {
-  margin-bottom: var(--s-6);
+  margin-bottom: 4px;
+  padding-top: 12px;
 }
 
+.toc-overlay__part:first-child { padding-top: 4px; }
 .toc-overlay__part:last-child { margin-bottom: 0; }
 
+/* Part header — quiet section label, Notion-sidebar style. */
 .toc-overlay__part-header {
   display: flex;
   align-items: baseline;
-  gap: var(--s-3);
-  margin-bottom: var(--s-3);
+  gap: 8px;
+  padding: 6px 8px 4px;
   font-family: var(--font-heading);
 }
 
 .toc-overlay__part-num {
   font-size: 10px;
   font-weight: 600;
-  letter-spacing: 0.14em;
+  letter-spacing: 0.12em;
   text-transform: uppercase;
   color: var(--ink-muted);
 }
 
 .toc-overlay__part-title {
-  font-size: 14px;
+  font-size: 12px;
   font-weight: 600;
-  color: var(--ink);
+  color: var(--ink-soft);
   letter-spacing: -0.005em;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
 }
 
 .toc-overlay__chapters {
@@ -1454,26 +1464,30 @@ body.has-toc-open .floating-toc-btn {
 
 .toc-overlay__chapters li::before { content: none; }
 
+/* Each chapter row — rounded Notion-style page row with hover bg. */
 .toc-overlay__chapters a {
   display: flex;
-  align-items: baseline;
-  gap: var(--s-4);
-  padding: 8px 0;
+  align-items: center;
+  gap: 10px;
+  padding: 5px 8px 5px 12px;
+  border-radius: 4px;
   font-family: var(--font-heading);
   font-size: 14px;
   color: var(--ink-soft);
   text-decoration: none;
   border-bottom: none;
-  transition: color 0.15s ease;
-  line-height: 1.4;
+  transition: background-color 0.12s ease, color 0.12s ease;
+  line-height: 1.35;
 }
 
 .toc-overlay__chapters a:hover {
+  background: rgba(0, 0, 0, 0.045);
   color: var(--ink);
 }
 
 .toc-overlay__chapters .is-current > a {
-  color: var(--accent);
+  background: rgba(0, 0, 0, 0.06);
+  color: var(--ink);
   font-weight: 600;
 }
 
@@ -1482,13 +1496,12 @@ body.has-toc-open .floating-toc-btn {
   font-style: italic;
 }
 
-/* "Прочитано" marker in the full TOC overlay — Notion-style checkmark
-   in place of the chapter number for read chapters. */
+/* «Прочитано» — ✓ marker replaces the chapter number for read chapters. */
 .toc-overlay__chapters .is-read > a {
   color: var(--ink-muted);
 }
 .toc-overlay__chapters .is-read .toc-overlay__chapter-num {
-  color: transparent;       /* hide the number itself, replace with ✓ */
+  color: transparent;
   position: relative;
 }
 .toc-overlay__chapters .is-read .toc-overlay__chapter-num::before {
@@ -1500,15 +1513,17 @@ body.has-toc-open .floating-toc-btn {
   font-weight: 600;
   display: flex;
   align-items: center;
+  justify-content: center;
 }
 
 .toc-overlay__chapter-num {
   font-family: var(--font-mono);
-  font-size: 10px;
+  font-size: 11px;
   color: var(--ink-muted);
-  width: 24px;
+  width: 18px;
   flex-shrink: 0;
   font-variant-numeric: tabular-nums;
+  text-align: center;
 }
 
 .toc-overlay__chapters .is-current .toc-overlay__chapter-num {
