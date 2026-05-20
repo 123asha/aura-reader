@@ -193,57 +193,27 @@ body {
 .global-nav__items li { padding-left: 0; }
 .global-nav__items li::before { content: none; }
 
-/* Slack-style stacked nav item: letter-avatar on top, small uppercase
-   label below.  More substantial than letter-only icons; still respects
-   the 80px rail width per brief §7.1. */
+/* Vertical-rotated label nav — labels read bottom-up along the rail.
+   The 80px rail keeps a clear vertical edge without an icon glyph. */
 .global-nav__items a {
-  display: flex;
-  flex-direction: column;
+  display: inline-flex;
   align-items: center;
-  justify-content: center;
-  gap: 4px;
-  padding: 8px 4px;
-  border-radius: 8px;
+  font-family: var(--font-heading);
+  font-size: 10px;
+  font-weight: 600;
+  letter-spacing: 0.18em;
+  text-transform: uppercase;
+  color: var(--ink-muted);
   text-decoration: none;
   border-bottom: none;
-  color: var(--ink-muted);
-  transition: background-color 0.15s ease, color 0.15s ease;
+  transition: color 0.15s ease;
+  writing-mode: vertical-rl;
+  transform: rotate(180deg);
+  padding: 12px 4px;
 }
 
 .global-nav__items a:hover {
-  background: rgba(0, 0, 0, 0.05);
   color: var(--ink);
-}
-
-.global-nav__items a:hover .global-nav__icon {
-  background: var(--ink);
-  color: var(--bg);
-}
-
-.global-nav__icon {
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  width: 32px;
-  height: 32px;
-  border-radius: 7px;
-  background: rgba(0, 0, 0, 0.05);
-  font-family: var(--font-heading);
-  font-size: 13px;
-  font-weight: 600;
-  color: var(--ink-soft);
-  letter-spacing: -0.01em;
-  transition: background-color 0.15s ease, color 0.15s ease;
-}
-
-.global-nav__label {
-  font-family: var(--font-heading);
-  font-size: 10px;
-  font-weight: 500;
-  letter-spacing: 0.08em;
-  text-transform: uppercase;
-  color: inherit;
-  line-height: 1;
 }
 
 /* ─── Middle column — chapter context ─── */
@@ -1635,30 +1605,6 @@ body.has-toc-open {
   overflow: hidden;
 }
 
-/* ───────────────────────────────────────────────────────────
-   TOP COLOR STRIP — thin multi-segment bar at the very top of the
-   viewport, Notion-style.  One dominant segment carries the brand
-   accent; smaller flanking segments add a touch of editorial color.
-   Purely decorative — pointer-events: none. */
-.top-strip {
-  position: fixed;
-  top: 0;
-  left: 0;
-  right: 0;
-  height: 3px;
-  display: flex;
-  z-index: 200;
-  pointer-events: none;
-}
-.top-strip__seg { height: 100%; }
-.top-strip__seg--main {
-  flex: 0 0 82%;
-  background: var(--accent);                /* #8B2A1E — brand accent */
-}
-.top-strip__seg--y    { flex: 0 0 7%;  background: #FEB51C; }   /* amber  */
-.top-strip__seg--g    { flex: 0 0 5%;  background: #95C92F; }   /* olive  */
-.top-strip__seg--d    { flex: 0 0 4%;  background: #2D3148; }   /* navy   */
-.top-strip__seg--b    { flex: 1 1 auto; background: #6B89B0; }  /* steel  */
 
 /* ===========================================================
    MARGINALIA — sidenotes in the right margin (Krichevsky pattern)
@@ -1795,24 +1741,15 @@ hr {
 </head>
 <body>
 
-<!-- Decorative top color strip — Notion-style, dominant accent + 4 short flanking segments. -->
-<div class="top-strip" aria-hidden="true">
-  <span class="top-strip__seg top-strip__seg--main"></span>
-  <span class="top-strip__seg top-strip__seg--y"></span>
-  <span class="top-strip__seg top-strip__seg--g"></span>
-  <span class="top-strip__seg top-strip__seg--d"></span>
-  <span class="top-strip__seg top-strip__seg--b"></span>
-</div>
-
 <div class="layout">
 
   <!-- ─── LEFT COLUMN — global nav (drawn but not functional in v1) ─── -->
   <nav class="global-nav" aria-label="Global">
     <a href="#" class="global-nav__logo" aria-label="Home">I.</a>
     <ul class="global-nav__items">
-      <li><a href="#"><span class="global-nav__icon" aria-hidden="true">B</span><span class="global-nav__label">Books</span></a></li>
-      <li><a href="#"><span class="global-nav__icon" aria-hidden="true">C</span><span class="global-nav__label">Canon</span></a></li>
-      <li><a href="#"><span class="global-nav__icon" aria-hidden="true">H</span><span class="global-nav__label">Home</span></a></li>
+      <li><a href="#">Books</a></li>
+      <li><a href="#">Canon</a></li>
+      <li><a href="#">Home</a></li>
     </ul>
   </nav>
 
