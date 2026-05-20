@@ -311,6 +311,22 @@ body {
   font-weight: 600;
 }
 
+/* "Прочитано" marker — small filled dot in front of the chapter title.
+   Brief §13: this is clientside state (no accounts).  Demo here is static
+   — production would read/write this from localStorage on chapter scroll
+   completion. */
+.chapter-context__chapters .is-read > a::before {
+  content: "●";
+  color: var(--accent);
+  font-size: 0.55em;
+  vertical-align: 0.18em;
+  margin-right: 4px;
+  opacity: 0.8;
+}
+.chapter-context__chapters .is-read > a {
+  color: var(--ink-muted);   /* already-read chapters quietly recede */
+}
+
 /* Mini-TOC: current chapter's H2/H3 list, with auto-highlight on scroll */
 .chapter-toc {
   list-style: none;
@@ -1087,16 +1103,67 @@ figure.series-opener {
   }
 }
 
-/* Tablet — middle column hides, layout shrinks to nav + content.
-   (Brief §8 says middle column "collapses into a dropdown menu" — TBD.) */
-@media (max-width: 1100px) {
+/* Tablet — middle column collapses into a dropdown (brief §11).
+   Trigger button «☰ Chapter contents» appears at top of right column;
+   click opens the same .chapter-context content as a floating panel. */
+.chapter-context-trigger {
+  display: none;             /* hidden on desktop and mobile */
+  align-items: center;
+  gap: 8px;
+  padding: 8px 14px;
+  background: transparent;
+  border: 1px solid var(--rule);
+  border-radius: 999px;
+  font-family: var(--font-heading);
+  font-size: 14px;
+  font-weight: 500;
+  color: var(--ink-soft);
+  cursor: pointer;
+  margin: 0 0 var(--s-6) 0;
+  transition: border-color 0.15s ease, color 0.15s ease;
+}
+.chapter-context-trigger:hover {
+  border-color: var(--ink-soft);
+  color: var(--ink);
+}
+
+@media (max-width: 1100px) and (min-width: 721px) {
   .layout {
     grid-template-columns: 64px 1fr;
     max-width: 760px;
   }
+  .chapter-context-trigger {
+    display: inline-flex;
+  }
+  /* Middle column is now a dropdown: hidden by default, shown when toggled. */
   .chapter-context {
     display: none;
+    position: fixed;
+    top: 16px;
+    left: 88px;             /* sits just right of the 64px nav rail + 24px gap */
+    width: 320px;
+    max-height: calc(100vh - 32px);
+    overflow-y: auto;
+    background: var(--bg);
+    border: 1px solid var(--rule);
+    border-radius: 10px;
+    padding: var(--s-5);
+    box-shadow: 0 12px 40px -8px rgba(0, 0, 0, 0.2),
+                0 2px 8px rgba(0, 0, 0, 0.08);
+    z-index: 40;
+    /* Sticky behaviour from desktop is no longer relevant inside the dropdown */
+    position: fixed;
   }
+  .chapter-context.is-open {
+    display: block;
+  }
+}
+
+/* Mobile breakpoint inherits — middle column stays display:none even when
+   the .is-open class is set, because mobile has its own floating-toc-btn. */
+@media (max-width: 720px) {
+  .chapter-context-trigger { display: none; }
+  .chapter-context, .chapter-context.is-open { display: none; }
 }
 
 /* Mobile — single column, no left rail.
@@ -1397,6 +1464,21 @@ body.has-toc-open .floating-toc-btn {
   font-style: italic;
 }
 
+/* "Прочитано" marker in the full TOC overlay (matches the mini-TOC pattern). */
+.toc-overlay__chapters .is-read > a {
+  color: var(--ink-muted);
+}
+.toc-overlay__chapters .is-read .toc-overlay__chapter-num {
+  color: var(--accent);
+}
+.toc-overlay__chapters .is-read .toc-overlay__chapter-num::before {
+  content: "●";
+  color: var(--accent);
+  font-size: 0.6em;
+  margin-right: 4px;
+  vertical-align: 0.18em;
+}
+
 .toc-overlay__chapter-num {
   font-family: var(--font-mono);
   font-size: 10px;
@@ -1626,7 +1708,7 @@ hr {
   </nav>
 
   <!-- ─── MIDDLE COLUMN — chapter context ─── -->
-  <aside class="chapter-context" aria-label="Chapter navigation">
+  <aside class="chapter-context" id="chapterContextPanel" aria-label="Chapter navigation">
 
     <button class="chapter-context__open-toc" type="button" aria-haspopup="dialog">
       <svg class="chapter-context__open-toc-icon" viewBox="0 0 14 14" fill="none" stroke="currentColor" stroke-width="1.5" aria-hidden="true">
@@ -1643,8 +1725,8 @@ hr {
       <p class="chapter-context__part-label">Part&nbsp;I</p>
       <p class="chapter-context__part-title">Foundations of Value</p>
       <ul class="chapter-context__chapters">
-        <li><a href="#">1. The Job as a unit of analysis</a></li>
-        <li><a href="#">2. Needs, goals, and the brain's predictive model</a></li>
+        <li class="is-read"><a href="#">1. The Job as a unit of analysis</a></li>
+        <li class="is-read"><a href="#">2. Needs, goals, and the brain's predictive model</a></li>
         <li class="is-current">
           <a href="#">3. How Value Flows from the Job Graph</a>
           <!-- Mini-TOC: H2 sections of the current chapter.
@@ -1671,6 +1753,22 @@ hr {
 
   <!-- ─── RIGHT COLUMN — chapter text ─── -->
   <main class="page">
+
+  <!-- Tablet-only trigger to open the middle column as a dropdown
+       (brief §11: «средняя сворачивается в выпадающее меню»).
+       Hidden on desktop (middle column visible) and mobile (different pattern). -->
+  <button class="chapter-context-trigger" type="button"
+          id="chapterContextTrigger" aria-expanded="false"
+          aria-controls="chapterContextPanel"
+          aria-label="Open chapter contents">
+    <svg viewBox="0 0 14 14" width="14" height="14" fill="none"
+         stroke="currentColor" stroke-width="1.5" aria-hidden="true">
+      <line x1="2" y1="3.5" x2="12" y2="3.5"/>
+      <line x1="2" y1="7" x2="12" y2="7"/>
+      <line x1="2" y1="10.5" x2="8" y2="10.5"/>
+    </svg>
+    <span>Chapter contents</span>
+  </button>
 
   <h1>How Value Flows from the Job Graph</h1>
   <p class="chapter-subtitle">An Introduction to Advanced Jobs To Be Done</p>
@@ -2278,8 +2376,8 @@ hr {
             <span class="toc-overlay__part-title">Foundations of Value</span>
           </header>
           <ul class="toc-overlay__chapters">
-            <li><a href="#"><span class="toc-overlay__chapter-num">1</span>The Job as a unit of analysis</a></li>
-            <li><a href="#"><span class="toc-overlay__chapter-num">2</span>Needs, goals, and the brain's predictive model</a></li>
+            <li class="is-read"><a href="#"><span class="toc-overlay__chapter-num">1</span>The Job as a unit of analysis</a></li>
+            <li class="is-read"><a href="#"><span class="toc-overlay__chapter-num">2</span>Needs, goals, and the brain's predictive model</a></li>
             <li class="is-current"><a href="#"><span class="toc-overlay__chapter-num">3</span>How Value Flows from the Job Graph</a></li>
             <li><a href="#"><span class="toc-overlay__chapter-num">4</span>Sub-Jobs and the critical sequence</a></li>
             <li><a href="#"><span class="toc-overlay__chapter-num">5</span>Mechanics of value creation</a></li>
@@ -2707,6 +2805,51 @@ hr {
     a.addEventListener('click', function() {
       setTimeout(close, 100);
     });
+  });
+})();
+</script>
+
+<script>
+/* ===========================================================
+   TABLET DROPDOWN — toggles the middle column as a floating panel
+   on tablet breakpoint (brief §11).  Triggered by the «Chapter
+   contents» button at top of the right column.  Closes on outside
+   click or Escape. */
+(function() {
+  'use strict';
+  var trigger = document.getElementById('chapterContextTrigger');
+  var panel   = document.getElementById('chapterContextPanel');
+  if (!trigger || !panel) return;
+
+  function open()  {
+    panel.classList.add('is-open');
+    trigger.setAttribute('aria-expanded', 'true');
+  }
+  function close() {
+    panel.classList.remove('is-open');
+    trigger.setAttribute('aria-expanded', 'false');
+  }
+
+  trigger.addEventListener('click', function(e) {
+    e.stopPropagation();
+    if (panel.classList.contains('is-open')) close(); else open();
+  });
+
+  // Click outside the panel closes it
+  document.addEventListener('click', function(e) {
+    if (!panel.classList.contains('is-open')) return;
+    if (panel.contains(e.target) || trigger.contains(e.target)) return;
+    close();
+  });
+
+  // Escape closes
+  document.addEventListener('keydown', function(e) {
+    if (e.key === 'Escape' && panel.classList.contains('is-open')) close();
+  });
+
+  // Clicking a chapter link inside the panel closes it
+  panel.addEventListener('click', function(e) {
+    if (e.target.closest('a')) close();
   });
 })();
 </script>
