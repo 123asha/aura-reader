@@ -193,21 +193,20 @@ body {
 .global-nav__items li { padding-left: 0; }
 .global-nav__items li::before { content: none; }
 
-/* Notion-style icon button: small square, letter inside, rounded hover. */
+/* Slack-style stacked nav item: letter-avatar on top, small uppercase
+   label below.  More substantial than letter-only icons; still respects
+   the 80px rail width per brief §7.1. */
 .global-nav__items a {
   display: flex;
+  flex-direction: column;
   align-items: center;
   justify-content: center;
-  width: 36px;
-  height: 36px;
-  border-radius: 6px;
-  font-family: var(--font-heading);
-  font-size: 12px;
-  font-weight: 600;
-  letter-spacing: -0.005em;
-  color: var(--ink-muted);
+  gap: 4px;
+  padding: 8px 4px;
+  border-radius: 8px;
   text-decoration: none;
   border-bottom: none;
+  color: var(--ink-muted);
   transition: background-color 0.15s ease, color 0.15s ease;
 }
 
@@ -216,16 +215,35 @@ body {
   color: var(--ink);
 }
 
-.global-nav__items .sr-only {
-  position: absolute;
-  width: 1px;
-  height: 1px;
-  padding: 0;
-  margin: -1px;
-  overflow: hidden;
-  clip: rect(0,0,0,0);
-  white-space: nowrap;
-  border: 0;
+.global-nav__items a:hover .global-nav__icon {
+  background: var(--ink);
+  color: var(--bg);
+}
+
+.global-nav__icon {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 32px;
+  height: 32px;
+  border-radius: 7px;
+  background: rgba(0, 0, 0, 0.05);
+  font-family: var(--font-heading);
+  font-size: 13px;
+  font-weight: 600;
+  color: var(--ink-soft);
+  letter-spacing: -0.01em;
+  transition: background-color 0.15s ease, color 0.15s ease;
+}
+
+.global-nav__label {
+  font-family: var(--font-heading);
+  font-size: 10px;
+  font-weight: 500;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: inherit;
+  line-height: 1;
 }
 
 /* ─── Middle column — chapter context ─── */
@@ -1792,9 +1810,9 @@ hr {
   <nav class="global-nav" aria-label="Global">
     <a href="#" class="global-nav__logo" aria-label="Home">I.</a>
     <ul class="global-nav__items">
-      <li><a href="#" title="Books"><span aria-hidden="true">B</span><span class="sr-only">Books</span></a></li>
-      <li><a href="#" title="Canon"><span aria-hidden="true">C</span><span class="sr-only">Canon</span></a></li>
-      <li><a href="#" title="Home"><span aria-hidden="true">H</span><span class="sr-only">Home</span></a></li>
+      <li><a href="#"><span class="global-nav__icon" aria-hidden="true">B</span><span class="global-nav__label">Books</span></a></li>
+      <li><a href="#"><span class="global-nav__icon" aria-hidden="true">C</span><span class="global-nav__label">Canon</span></a></li>
+      <li><a href="#"><span class="global-nav__icon" aria-hidden="true">H</span><span class="global-nav__label">Home</span></a></li>
     </ul>
   </nav>
 
