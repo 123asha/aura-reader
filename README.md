@@ -1,4 +1,4 @@
-# AURA Reader — chapter prototype
+# Skip Design
 
 Working prototype of the AURA Book chapter-reading screen per the design brief in `DESIGN-BRIEF.md` (not in this repo — lives separately).
 
